@@ -1,778 +1,652 @@
-/* ==========================================================================
-   DESIGN TOKENS
-   ========================================================================== */
-:root {
-  --bg: #f9f0e6;
-  --bg-warm-2: #f3e3d3;
-  --surface: #fffaf4;
-  --text: #3a2a32;
-  --muted: #8a7368;
-  --accent: #b5566b;      /* dusty rose */
-  --accent-2: #d6a24c;    /* muted gold */
-  --heart: #e38c93;
-  --radius: 22px;
-  --radius-sm: 14px;
-  --shadow: 0 12px 30px rgba(58, 42, 50, 0.12);
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-/* Dark / emotional palette, applied via .scene--dark */
-.scene--dark {
-  --bg: #2c2030;
-  --bg-warm-2: #241a29;
-  --surface: #362a3b;
-  --text: #f3e7e2;
-  --muted: #b8a2ac;
-}
-
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
-h1, h2, h3, p, button {
-  margin: 0;
-  padding: 0;
-}
-
-img { max-width: 100%; display: block; }
-
-button {
-  font-family: inherit;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-.emoji { font-style: normal; }
-
-/* ==========================================================================
-   SCENE LAYOUT
-   ========================================================================== */
-#app {
-  position: relative;
-  width: 100%;
-}
-
-.scene {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 20px 48px;
-  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm-2) 100%);
-  transition: background 0.6s var(--ease);
-  overflow: hidden;
-}
-
-.scene.is-active {
-  display: flex;
-}
-
-.scene-inner {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: relative;
-  z-index: 2;
-}
-
-.scene-inner--center {
-  align-items: center;
-  text-align: center;
-}
-
-.scene--wide .scene-inner {
-  max-width: 560px;
-}
-
-/* Lines fade/slide in one at a time, orchestrated by JS via .is-visible */
-.line {
-  font-size: 1.15rem;
-  line-height: 1.5;
-  color: var(--text);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-
-.line.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.line--headline {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.8rem, 8vw, 2.6rem);
-  line-height: 1.2;
-  margin: 6px 0;
-}
-
-.line--small {
-  font-size: 0.95rem;
-  color: var(--muted);
-}
-
-.eyebrow-free-heading {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 6vw, 2rem);
-  font-weight: 500;
-  text-align: center;
-  margin-bottom: 6px;
-}
-
-/* ==========================================================================
-   BUTTONS
-   ========================================================================== */
-.btn {
-  min-height: 48px;
-  padding: 13px 28px;
-  border-radius: 999px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1rem;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), background 0.2s ease, box-shadow 0.2s ease;
-  touch-action: manipulation;
-}
-
-.btn.is-visible { opacity: 1; transform: translateY(0); }
-
-.btn--primary {
-  background: var(--accent);
-  color: #fff8f5;
-  box-shadow: 0 8px 20px rgba(181, 86, 107, 0.35);
-}
-
-.btn--primary:active { transform: scale(0.96); }
-
-.btn--secondary {
-  background: transparent;
-  color: var(--accent);
-  border: 1.5px solid var(--accent);
-}
-
-.scene--dark .btn--secondary { color: var(--accent-2); border-color: var(--accent-2); }
-
-.btn--secondary:active { transform: scale(0.96); }
-
-.btn--pulse {
-  animation: pulse 2.2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 8px 20px rgba(181, 86, 107, 0.35); }
-  50% { box-shadow: 0 8px 28px rgba(181, 86, 107, 0.6); }
-}
-
-.btn-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--accent);
-  font-size: 1.2rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-icon:active { transform: scale(0.94); }
-
-.btn-icon:disabled { opacity: 0.35; }
-
-/* ==========================================================================
-   PARTICLES (hearts)
-   ========================================================================== */
-.particle-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  overflow: hidden;
-}
-
-.particle {
-  position: absolute;
-  bottom: -30px;
-  font-size: 1.2rem;
-  opacity: 0.85;
-  animation: floatUp linear forwards;
-  will-change: transform, opacity;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.9; }
-  100% { transform: translateY(-110vh) translateX(var(--drift, 20px)) rotate(20deg); opacity: 0; }
-}
-
-/* ==========================================================================
-   SCENE 1: envelope
-   ========================================================================== */
-.envelope {
-  width: 96px;
-  height: 72px;
-  margin-bottom: 8px;
-  animation: floatSlow 4s ease-in-out infinite;
-}
-
-.envelope-svg { width: 100%; height: 100%; }
-.env-body { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
-.env-flap { fill: none; stroke: var(--accent); stroke-width: 2; }
-
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-/* ==========================================================================
-   SCENE 2: gift box
-   ========================================================================== */
-.gift-box {
-  position: relative;
-  width: 140px;
-  height: 130px;
-  margin: 16px 0;
-  animation: shake 3s ease-in-out infinite;
-}
-
-.gift-box--small { width: 100px; height: 92px; margin: 10px 0; animation: none; }
-
-.gift-base {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 66%;
-  background: var(--accent);
-  border-radius: 8px;
-}
-
-.gift-lid {
-  position: absolute;
-  top: 18%;
-  left: -6%;
-  width: 112%;
-  height: 22%;
-  background: var(--accent-2);
-  border-radius: 6px;
-  transform-origin: left center;
-  transition: transform 0.9s var(--ease), opacity 0.6s ease;
-}
-
-.gift-ribbon-v {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 16%;
-  height: 100%;
-  background: var(--surface);
-  transform: translateX(-50%);
-  opacity: 0.9;
-}
-
-.gift-ribbon-h {
-  position: absolute;
-  top: 18%;
-  left: 0;
-  width: 100%;
-  height: 22%;
-  background: var(--surface);
-  opacity: 0.9;
-}
-
-.gift-glow {
-  position: absolute;
-  top: -10%;
-  left: 50%;
-  width: 140%;
-  height: 60%;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(214, 162, 76, 0.55) 0%, rgba(214, 162, 76, 0) 70%);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-}
-
-@keyframes shake {
-  0%, 92%, 100% { transform: rotate(0deg); }
-  93% { transform: rotate(-3deg); }
-  95% { transform: rotate(3deg); }
-  97% { transform: rotate(-2deg); }
-}
-
-.gift-box.is-open .gift-lid {
-  transform: translateY(-46px) rotate(-24deg);
-  opacity: 0;
-}
-
-.gift-box.is-open .gift-glow { opacity: 1; }
-.gift-box.is-open { animation: none; }
-
-/* ==========================================================================
-   SCENE 3/4/7/8: couple image
-   ========================================================================== */
-.couple-frame {
-  position: relative;
-  width: min(72vw, 280px);
-  margin: 4px auto 8px;
-  opacity: 0;
-  transform: scale(0.92) translateY(10px);
-  transition: opacity 1s var(--ease), transform 1s var(--ease);
-}
-
-.couple-frame.is-visible {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-.couple-frame--small { width: min(50vw, 190px); }
-.couple-frame--muted { filter: saturate(0.75) brightness(0.92); }
-.couple-frame--cake { width: min(62vw, 240px); }
-
-/* Outer wrapper receives pointer/touch-driven 3D tilt from JS (inline
-   transform), so it must not carry any competing CSS transform. */
-.couple-tilt {
-  perspective: 900px;
-  transform-style: preserve-3d;
-  transition: transform 0.25s var(--ease);
-  will-change: transform;
-}
+/* ============================================================================
+   CUSTOMIZATION AREA
+   Edit everything in this block to personalize the experience.
+   Nothing outside this block needs to change for basic personalization.
+   ============================================================================ */
+
+const HER_NAME = "My Love";
+
+const BIRTHDAY_MESSAGE = `Happy Birthday, my love. ❤️
+
+I hope this year brings you countless reasons to smile,
+new memories,
+new adventures,
+and everything you've been wishing for.
+
+Thank you for being part of my life.
+
+And here's to all the moments we haven't made yet.`;
+
+// Each memory supports an optional photo. If the image file doesn't exist,
+// a designed placeholder is shown automatically — nothing breaks.
+const MEMORIES = [
+  {
+    title: "The beginning",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory1.jpg",
+  },
+  {
+    title: "The stupid conversations",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory2.jpg",
+  },
+  {
+    title: "The endless calls",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory3.jpg",
+  },
+  {
+    title: "The moments that made us laugh",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory4.jpg",
+  },
+  {
+    title: "The arguments",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory5.jpg",
+  },
+  {
+    title: "The apologies",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory6.jpg",
+  },
+  {
+    title: "And everything in between",
+    description: "PLACE YOUR MEMORY HERE",
+    date: "",
+    image: "assets/photos/memory7.jpg",
+  },
+];
+
+// Choose ONE type: "message" | "image" | "video" | "audio"
+// See README.md for how each type works.
+const FINAL_SURPRISE = {
+  type: "message",
+  content: "This is where one very last little surprise goes — a message, a photo, a video, or a voice note. Your call.",
+};
+
+// Set to true once assets/audio/music.mp3 exists and you want the toggle to show.
+const ENABLE_MUSIC = false;
+
+/* ============================================================================
+   END CUSTOMIZATION AREA
+   ============================================================================ */
+
+const SCENES = [
+  "intro",
+  "gift",
+  "couple",
+  "us",
+  "memories",
+  "playful",
+  "emotional",
+  "birthday",
+  "message",
+  "surprise",
+  "final",
+];
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const state = {
+  currentSceneIndex: 0,
+  memoryIndex: 0,
+};
+
+/* ----------------------------------------------------------------------
+   Scene management
+   ---------------------------------------------------------------------- */
 
-/* Inner image carries the constant idle "alive" motion — a gentle
-   breathing sway — completely independent of the tilt transform above. */
-.couple-img {
-  width: 100%;
-  border-radius: var(--radius);
-  transform-origin: 50% 85%;
-  animation: coupleBreathe 4.5s ease-in-out infinite;
-  cursor: pointer;
-  touch-action: manipulation;
+function getSceneEl(name) {
+  return document.getElementById(`scene-${name}`);
 }
-
-.couple-img.is-nudged {
-  animation: coupleNudge 0.7s var(--ease);
-}
-
-@keyframes coupleBreathe {
-  0%, 100% { transform: translateY(0) rotate(-0.7deg) scale(1); }
-  50% { transform: translateY(-7px) rotate(0.7deg) scale(1.012); }
-}
-
-@keyframes coupleNudge {
-  0% { transform: scale(1) rotate(0deg); }
-  30% { transform: scale(1.06) rotate(-3deg); }
-  55% { transform: scale(0.98) rotate(2.5deg); }
-  75% { transform: scale(1.03) rotate(-1deg); }
-  100% { transform: scale(1) rotate(0deg); }
-}
-
-/* Sparkle burst spawned near a tapped couple image */
-.sparkle-burst {
-  position: absolute;
-  font-size: 1rem;
-  pointer-events: none;
-  animation: sparkleOut 0.9s ease-out forwards;
-}
-
-@keyframes sparkleOut {
-  0% { transform: translate(0, 0) scale(0.6); opacity: 1; }
-  100% { transform: translate(var(--sx, 0), var(--sy, -40px)) scale(1.1); opacity: 0; }
-}
-
-/* Graceful fallback if assets/couple.png fails to load */
-.couple-img-fallback {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--radius);
-  background: linear-gradient(150deg, var(--accent) 0%, var(--accent-2) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff8f5;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  text-align: center;
-  padding: 20px;
-  animation: coupleBreathe 4.5s ease-in-out infinite;
-}
-
-.couple-glow {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  width: 120%;
-  height: 80%;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(214, 162, 76, 0.35) 0%, rgba(214, 162, 76, 0) 70%);
-  z-index: -1;
-}
-
-/* Birthday cake overlay, built with CSS to sit "between" the couple */
-.cake {
-  position: absolute;
-  bottom: -6%;
-  left: 50%;
-  transform: translateX(-50%) scale(0);
-  width: 34%;
-  transition: transform 0.6s var(--ease-bounce, var(--ease));
-}
-
-.cake.is-visible {
-  transform: translateX(-50%) scale(1);
-  animation: cakePop 0.7s var(--ease);
-}
-
-@keyframes cakePop {
-  0% { transform: translateX(-50%) scale(0); }
-  60% { transform: translateX(-50%) scale(1.15); }
-  100% { transform: translateX(-50%) scale(1); }
-}
-
-.cake-body {
-  width: 100%;
-  height: 26px;
-  background: var(--accent);
-  border-radius: 6px;
-}
-
-.cake-top {
-  width: 108%;
-  margin-left: -4%;
-  height: 10px;
-  background: var(--surface);
-  border-radius: 6px;
-  margin-bottom: -2px;
-  position: relative;
-  z-index: 1;
-}
-
-.cake-candle {
-  position: absolute;
-  top: -22px;
-  width: 4px;
-  height: 18px;
-  background: var(--accent-2);
-  border-radius: 2px;
-}
-
-.candle1 { left: 38%; }
-.candle2 { left: 58%; }
-
-.cake-flame {
-  position: absolute;
-  top: -30px;
-  width: 7px;
-  height: 10px;
-  background: radial-gradient(circle, #ffd98a 0%, #f4a13c 70%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: flicker 0.6s ease-in-out infinite alternate;
-}
-
-.flame1 { left: calc(38% - 1.5px); }
-.flame2 { left: calc(58% - 1.5px); animation-delay: 0.3s; }
-
-@keyframes flicker {
-  0% { transform: scale(1) rotate(-2deg); opacity: 1; }
-  100% { transform: scale(0.85) rotate(3deg); opacity: 0.85; }
-}
-
-/* ==========================================================================
-   SCENE 5: memories
-   ========================================================================== */
-.memory-progress {
-  width: 100%;
-  height: 4px;
-  background: rgba(138, 115, 104, 0.2);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.memory-progress-fill {
-  height: 100%;
-  width: 14%;
-  background: var(--accent);
-  border-radius: 4px;
-  transition: width 0.5s var(--ease);
-}
-
-.memory-track {
-  position: relative;
-  width: 100%;
-  height: 340px;
-  outline: none;
-}
-
-.memory-card {
-  position: absolute;
-  inset: 0;
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  transform: translateX(40px) scale(0.97);
-  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
-  pointer-events: none;
-}
-
-.memory-card.is-active {
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  pointer-events: auto;
-  z-index: 2;
-}
-
-.memory-card.is-prev {
-  opacity: 0;
-  transform: translateX(-40px) scale(0.97);
-}
-
-.memory-card-media {
-  flex: 1;
-  min-height: 0;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.memory-card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.memory-card-placeholder {
-  font-family: var(--font-display);
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 2.4rem;
-}
-
-.memory-card-body {
-  padding: 16px 18px 18px;
-  text-align: left;
-}
-
-.memory-card-index {
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin-bottom: 2px;
-}
-
-.memory-card-title {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.memory-card-desc {
-  font-size: 0.95rem;
-  color: var(--muted);
-  line-height: 1.4;
-}
-
-.memory-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 14px;
-}
-
-.memory-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.memory-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(138, 115, 104, 0.3);
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.memory-dot.is-active {
-  background: var(--accent);
-  transform: scale(1.3);
-}
-
-#btnFinishMemories { margin: 18px auto 0; opacity: 1; transform: none; }
-
-/* ==========================================================================
-   SCENE 6: playful bubbles
-   ========================================================================== */
-.bubbles {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-
-.bubbles.is-visible { opacity: 1; transform: translateY(0); }
-
-.bubble {
-  max-width: 75%;
-  padding: 10px 16px;
-  border-radius: 18px;
-  font-size: 0.98rem;
-}
-
-.bubble--left {
-  align-self: flex-start;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  border-bottom-left-radius: 4px;
-}
-
-.bubble--right {
-  align-self: flex-end;
-  background: var(--accent);
-  color: #fff8f5;
-  border-bottom-right-radius: 4px;
-}
-
-/* ==========================================================================
-   SCENE 9: letter
-   ========================================================================== */
-.letter-card {
-  width: 100%;
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 26px 22px;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
-}
-
-.letter-card.is-visible { opacity: 1; transform: translateY(0); }
-
-.letter-text {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  line-height: 1.7;
-  white-space: pre-line;
-  text-align: left;
-}
-
-/* ==========================================================================
-   SCENE 10: surprise
-   ========================================================================== */
-.surprise-content {
-  width: 100%;
-  margin-top: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-
-.surprise-content.is-visible { opacity: 1; transform: translateY(0); }
-
-.surprise-content img,
-.surprise-content video {
-  width: 100%;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.surprise-message {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  line-height: 1.6;
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 22px;
-}
-
-/* ==========================================================================
-   AUDIO TOGGLE
-   ========================================================================== */
-.audio-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.15rem;
-  z-index: 100;
-}
-
-.audio-toggle:active { transform: scale(0.94); }
 
-/* ==========================================================================
-   ACCESSIBILITY
-   ========================================================================== */
-.btn:focus-visible,
-.btn-icon:focus-visible,
-.audio-toggle:focus-visible,
-.memory-track:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+function showScene(name) {
+  document.querySelectorAll(".scene").forEach((el) => el.classList.remove("is-active"));
+  const el = getSceneEl(name);
+  if (!el) return;
+  el.classList.add("is-active");
+  window.scrollTo({ top: 0, behavior: "auto" });
+  revealSceneLines(el);
+  runSceneEnterHook(name);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.2s !important;
-    scroll-behavior: auto !important;
+function nextScene() {
+  if (state.currentSceneIndex < SCENES.length - 1) {
+    state.currentSceneIndex += 1;
+    showScene(SCENES[state.currentSceneIndex]);
   }
-  .particle-layer { display: none; }
 }
 
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media (min-width: 640px) {
-  .line { font-size: 1.25rem; }
-  .memory-track { height: 380px; }
+function goToScene(name) {
+  const idx = SCENES.indexOf(name);
+  if (idx !== -1) {
+    state.currentSceneIndex = idx;
+    showScene(name);
+  }
 }
 
-@media (max-width: 340px) {
-  .scene { padding: 24px 14px 40px; }
-  .line { font-size: 1.05rem; }
+/* Reveal each .line / .btn inside the active scene in sequence, based on
+   the numeric data-line attribute. Keeps pacing readable but not slow. */
+function revealSceneLines(sceneEl) {
+  const items = Array.from(sceneEl.querySelectorAll("[data-line]"));
+  items.forEach((el) => el.classList.remove("is-visible"));
+
+  if (items.length === 0) return;
+
+  const step = prefersReducedMotion ? 90 : 650;
+  const baseDelay = prefersReducedMotion ? 0 : 300;
+
+  items.forEach((el) => {
+    const order = Number(el.getAttribute("data-line")) || 0;
+    setTimeout(() => {
+      el.classList.add("is-visible");
+    }, baseDelay + order * step);
+  });
 }
+
+/* Scene-specific setup that should happen each time a scene becomes active. */
+function runSceneEnterHook(name) {
+  switch (name) {
+    case "couple":
+      animateCoupleFrame("coupleImg1", 900);
+      break;
+    case "memories":
+      initMemories();
+      break;
+    case "birthday":
+      setupBirthdayScene();
+      break;
+    case "message":
+      setupMessageScene();
+      break;
+    default:
+      break;
+  }
+}
+
+function animateCoupleFrame(imgId, delay) {
+  const img = document.getElementById(imgId);
+  if (!img) return;
+  const frame = img.closest(".couple-frame");
+  frame.classList.remove("is-visible");
+  setTimeout(() => frame.classList.add("is-visible"), delay ? 100 : 0);
+}
+
+/* ----------------------------------------------------------------------
+   Couple illustration: pointer/touch tilt, tap-to-nudge, graceful fallback
+   ---------------------------------------------------------------------- */
+
+function setupCoupleInteractions() {
+  // Pointer-driven 3D tilt on every wrapper.
+  if (!prefersReducedMotion) {
+    document.querySelectorAll("[data-tilt]").forEach((el) => {
+      let rafId = null;
+
+      const applyTilt = (clientX, clientY) => {
+        const rect = el.getBoundingClientRect();
+        const px = (clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
+        const py = (clientY - rect.top) / rect.height - 0.5;
+        const maxTilt = 8; // degrees
+        const rotateY = px * maxTilt * 2;
+        const rotateX = -py * maxTilt;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+      };
+
+      const resetTilt = () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        el.style.transform = "rotateX(0deg) rotateY(0deg)";
+      };
+
+      el.addEventListener("pointermove", (e) => applyTilt(e.clientX, e.clientY));
+      el.addEventListener("pointerleave", resetTilt);
+
+      el.addEventListener(
+        "touchmove",
+        (e) => {
+          if (e.touches[0]) applyTilt(e.touches[0].clientX, e.touches[0].clientY);
+        },
+        { passive: true }
+      );
+      el.addEventListener("touchend", resetTilt, { passive: true });
+    });
+  }
+
+  // Tap/click the couple to get a playful little reaction: a quick
+  // squash-and-stretch nudge plus a small sparkle burst.
+  document.querySelectorAll("[data-couple-img]").forEach((img) => {
+    img.addEventListener("click", (e) => {
+      img.classList.remove("is-nudged");
+      // Force reflow so the animation can restart on repeated taps.
+      void img.offsetWidth;
+      img.classList.add("is-nudged");
+      spawnSparkleBurst(img);
+    });
+
+    // Graceful fallback if the image never loads.
+    img.addEventListener(
+      "error",
+      () => {
+        const frame = img.closest(".couple-frame");
+        const tilt = img.closest(".couple-tilt");
+        const holder = tilt || img.parentElement;
+        img.remove();
+        const fallback = document.createElement("div");
+        fallback.className = "couple-img-fallback";
+        fallback.textContent = "Our picture goes here — add assets/couple.png";
+        holder.appendChild(fallback);
+        if (frame) frame.classList.add("is-visible");
+      },
+      { once: true }
+    );
+  });
+}
+
+function spawnSparkleBurst(anchorEl) {
+  if (prefersReducedMotion) return;
+  const frame = anchorEl.closest(".couple-frame");
+  if (!frame) return;
+  const symbols = ["✨", "💕", "⭐"];
+  const count = 6;
+  for (let i = 0; i < count; i++) {
+    const span = document.createElement("span");
+    span.className = "sparkle-burst";
+    span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+    const distance = 50 + Math.random() * 30;
+    span.style.setProperty("--sx", `${Math.cos(angle) * distance}px`);
+    span.style.setProperty("--sy", `${Math.sin(angle) * distance - 20}px`);
+    span.style.left = "50%";
+    span.style.top = "40%";
+    frame.appendChild(span);
+    span.addEventListener("animationend", () => span.remove());
+  }
+}
+
+// Reveal every .couple-frame in the currently active scene (used by scenes
+// that don't have a unique id, e.g. "us" and "emotional").
+function revealCoupleFramesIn(sceneEl) {
+  sceneEl.querySelectorAll(".couple-frame").forEach((frame) => {
+    frame.classList.remove("is-visible");
+    requestAnimationFrame(() => frame.classList.add("is-visible"));
+  });
+}
+
+/* ----------------------------------------------------------------------
+   Particles (hearts) — used sparingly, on key transitions only
+   ---------------------------------------------------------------------- */
+
+function spawnParticles(count) {
+  if (prefersReducedMotion) return;
+  const layer = document.getElementById("particleLayer");
+  const hearts = ["❤️", "💛", "✨"];
+  for (let i = 0; i < count; i++) {
+    const span = document.createElement("span");
+    span.className = "particle";
+    span.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    span.style.left = `${Math.random() * 90 + 5}%`;
+    span.style.setProperty("--drift", `${Math.random() * 60 - 30}px`);
+    span.style.animationDuration = `${3.5 + Math.random() * 2.5}s`;
+    layer.appendChild(span);
+    span.addEventListener("animationend", () => span.remove());
+  }
+}
+
+/* ----------------------------------------------------------------------
+   SCENE 1 — intro
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnOpenIntro").addEventListener("click", () => {
+  spawnParticles(10);
+  setTimeout(nextScene, 350);
+});
+
+/* ----------------------------------------------------------------------
+   SCENE 2 — gift box
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnOpenGift").addEventListener("click", (e) => {
+  const box = document.getElementById("giftBox");
+  const btn = e.currentTarget;
+  box.classList.add("is-open");
+  btn.disabled = true;
+  spawnParticles(14);
+  setTimeout(nextScene, 900);
+});
+
+/* ----------------------------------------------------------------------
+   SCENE 3 — couple appears (handled via runSceneEnterHook + revealSceneLines)
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnContinueCouple").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 4 — "This is us"
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnContinueUs").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 5 — memory journey
+   ---------------------------------------------------------------------- */
+
+function initMemories() {
+  const track = document.getElementById("memoryTrack");
+  const dotsWrap = document.getElementById("memoryDots");
+  if (track.childElementCount > 0) {
+    // already built — just re-render current position
+    renderMemoryPosition();
+    return;
+  }
+
+  track.innerHTML = "";
+  dotsWrap.innerHTML = "";
+
+  MEMORIES.forEach((memory, i) => {
+    const card = document.createElement("div");
+    card.className = "memory-card";
+    card.dataset.index = String(i);
+
+    const media = document.createElement("div");
+    media.className = "memory-card-media";
+
+    const img = document.createElement("img");
+    img.alt = memory.title;
+    img.loading = "lazy";
+    img.src = memory.image;
+    img.addEventListener("error", () => {
+      img.remove();
+      const placeholder = document.createElement("div");
+      placeholder.className = "memory-card-placeholder";
+      placeholder.textContent = `0${i + 1}`;
+      media.appendChild(placeholder);
+    });
+    media.appendChild(img);
+
+    const body = document.createElement("div");
+    body.className = "memory-card-body";
+    body.innerHTML = `
+      <div class="memory-card-index">Memory 0${i + 1}${memory.date ? " · " + memory.date : ""}</div>
+      <div class="memory-card-title">${memory.title}</div>
+      <div class="memory-card-desc">${memory.description}</div>
+    `;
+
+    card.appendChild(media);
+    card.appendChild(body);
+    track.appendChild(card);
+
+    const dot = document.createElement("div");
+    dot.className = "memory-dot";
+    dotsWrap.appendChild(dot);
+  });
+
+  // Swipe support
+  let touchStartX = null;
+  track.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.touches[0].clientX;
+    },
+    { passive: true }
+  );
+  track.addEventListener(
+    "touchend",
+    (e) => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) {
+        dx < 0 ? memoryStep(1) : memoryStep(-1);
+      }
+      touchStartX = null;
+    },
+    { passive: true }
+  );
+
+  // Keyboard support
+  track.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") memoryStep(1);
+    if (e.key === "ArrowLeft") memoryStep(-1);
+  });
+
+  state.memoryIndex = 0;
+  renderMemoryPosition();
+}
+
+function memoryStep(delta) {
+  const next = state.memoryIndex + delta;
+  if (next < 0 || next > MEMORIES.length - 1) return;
+  state.memoryIndex = next;
+  renderMemoryPosition();
+}
+
+function renderMemoryPosition() {
+  const cards = document.querySelectorAll("#memoryTrack .memory-card");
+  cards.forEach((card, i) => {
+    card.classList.remove("is-active", "is-prev");
+    if (i === state.memoryIndex) {
+      card.classList.add("is-active");
+    } else if (i < state.memoryIndex) {
+      card.classList.add("is-prev");
+    }
+  });
+
+  const dots = document.querySelectorAll("#memoryDots .memory-dot");
+  dots.forEach((dot, i) => dot.classList.toggle("is-active", i === state.memoryIndex));
+
+  const fill = document.getElementById("memoryProgressFill");
+  const pct = ((state.memoryIndex + 1) / MEMORIES.length) * 100;
+  fill.style.width = `${pct}%`;
+
+  document.getElementById("memPrev").disabled = state.memoryIndex === 0;
+  document.getElementById("memNext").disabled = state.memoryIndex === MEMORIES.length - 1;
+}
+
+document.getElementById("memPrev").addEventListener("click", () => memoryStep(-1));
+document.getElementById("memNext").addEventListener("click", () => memoryStep(1));
+document.getElementById("btnFinishMemories").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 6 — playful
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnContinuePlayful").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 7 — emotional (line reveal handles pacing; frame revealed too)
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnContinueEmotional").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 8 — birthday reveal
+   ---------------------------------------------------------------------- */
+
+function setupBirthdayScene() {
+  document.getElementById("birthdayName").textContent = `Happy Birthday, ${HER_NAME}`;
+  const cake = document.getElementById("cakeEl");
+  cake.classList.remove("is-visible");
+  setTimeout(() => {
+    cake.classList.add("is-visible");
+    spawnParticles(18);
+  }, 700);
+}
+
+document.getElementById("btnContinueBirthday").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 9 — final message
+   ---------------------------------------------------------------------- */
+
+function setupMessageScene() {
+  document.getElementById("letterText").textContent = BIRTHDAY_MESSAGE;
+  const card = document.getElementById("letterCard");
+  card.classList.remove("is-visible");
+  setTimeout(() => card.classList.add("is-visible"), 200);
+}
+
+document.getElementById("btnContinueMessage").addEventListener("click", nextScene);
+
+/* ----------------------------------------------------------------------
+   SCENE 10 — final surprise
+   ---------------------------------------------------------------------- */
+
+document.getElementById("btnOpenSurprise").addEventListener("click", (e) => {
+  e.currentTarget.remove();
+  renderFinalSurprise();
+  spawnParticles(12);
+});
+
+function renderFinalSurprise() {
+  const wrap = document.getElementById("surpriseContent");
+  wrap.hidden = false;
+
+  const finish = () => {
+    const btn = document.createElement("button");
+    btn.className = "btn btn--primary";
+    btn.style.marginTop = "8px";
+    btn.textContent = "Continue";
+    btn.addEventListener("click", nextScene);
+    wrap.appendChild(btn);
+    requestAnimationFrame(() => wrap.classList.add("is-visible"));
+  };
+
+  const fallbackToMessage = (reason) => {
+    wrap.innerHTML = `<div class="surprise-message">${escapeHtml(FINAL_SURPRISE.content || "You. Always you.")}</div>`;
+    finish();
+  };
+
+  switch (FINAL_SURPRISE.type) {
+    case "image": {
+      const img = document.createElement("img");
+      img.alt = "One last surprise";
+      img.src = FINAL_SURPRISE.content;
+      img.addEventListener("error", () => fallbackToMessage("image missing"));
+      wrap.appendChild(img);
+      finish();
+      break;
+    }
+    case "video": {
+      const video = document.createElement("video");
+      video.src = FINAL_SURPRISE.content;
+      video.controls = true;
+      video.playsInline = true;
+      video.addEventListener("error", () => fallbackToMessage("video missing"));
+      wrap.appendChild(video);
+      finish();
+      break;
+    }
+    case "audio": {
+      const label = document.createElement("div");
+      label.className = "surprise-message";
+      label.textContent = "One more voice note for you 🎙️";
+      const audio = document.createElement("audio");
+      audio.src = FINAL_SURPRISE.content;
+      audio.controls = true;
+      audio.style.width = "100%";
+      audio.addEventListener("error", () => fallbackToMessage("audio missing"));
+      wrap.appendChild(label);
+      wrap.appendChild(audio);
+      finish();
+      break;
+    }
+    case "message":
+    default: {
+      fallbackToMessage("message type");
+      break;
+    }
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ----------------------------------------------------------------------
+   SCENE 11 — physical gift (final screen, no further action)
+   ---------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------
+   Music toggle — never autoplays; hides itself if audio is unavailable
+   ---------------------------------------------------------------------- */
+
+function setupAudio() {
+  if (!ENABLE_MUSIC) return;
+  const toggle = document.getElementById("audioToggle");
+  const icon = document.getElementById("audioIcon");
+  const audio = document.getElementById("bgMusic");
+  let checked = false;
+  let playing = false;
+
+  const reveal = () => {
+    if (checked) return;
+    checked = true;
+    toggle.hidden = false;
+  };
+
+  // If the browser can read metadata, the file exists and is playable.
+  audio.addEventListener("loadedmetadata", reveal, { once: true });
+  audio.addEventListener(
+    "error",
+    () => {
+      toggle.hidden = true;
+    },
+    { once: true }
+  );
+  audio.load();
+
+  toggle.addEventListener("click", () => {
+    if (!playing) {
+      audio.play().then(() => {
+        playing = true;
+        icon.textContent = "🔊";
+        toggle.setAttribute("aria-pressed", "true");
+      }).catch(() => {
+        /* Autoplay-style restrictions or missing file — fail silently. */
+      });
+    } else {
+      audio.pause();
+      playing = false;
+      icon.textContent = "🔇";
+      toggle.setAttribute("aria-pressed", "false");
+    }
+  });
+}
+
+/* ----------------------------------------------------------------------
+   Extra hook: reveal couple-frame elements on scenes without a unique id
+   ---------------------------------------------------------------------- */
+
+const originalRunSceneEnterHook = runSceneEnterHook;
+function extendedRunSceneEnterHook(name) {
+  originalRunSceneEnterHook(name);
+  if (name === "us" || name === "emotional" || name === "birthday") {
+    const el = getSceneEl(name);
+    revealCoupleFramesIn(el);
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Init
+   ---------------------------------------------------------------------- */
+
+function init() {
+  setupAudio();
+  setupCoupleInteractions();
+  showScene(SCENES[state.currentSceneIndex]);
+}
+
+// Swap in the extended hook before first paint.
+runSceneEnterHook = extendedRunSceneEnterHook;
+
+document.addEventListener("DOMContentLoaded", init);
