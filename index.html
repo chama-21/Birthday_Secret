@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>A little secret for you</title>
+<meta name="description" content="A tiny interactive love letter." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Ambient floating hearts / particle layer, shared across scenes -->
+<div class="particle-layer" id="particleLayer" aria-hidden="true"></div>
+
+<!-- Audio toggle, fixed position, hidden until audio asset is confirmed present -->
+<button class="audio-toggle" id="audioToggle" aria-label="Toggle music" aria-pressed="false" hidden>
+  <span class="audio-icon" id="audioIcon">🔇</span>
+</button>
+<audio id="bgMusic" loop preload="none">
+  <source src="assets/audio/music.mp3" type="audio/mpeg">
+</audio>
+
+<main id="app">
+
+  <!-- SCENE 1: Secret discovery -->
+  <section class="scene" id="scene-intro" data-scene="intro">
+    <div class="scene-inner scene-inner--center">
+      <div class="envelope" id="envelope" aria-hidden="true">
+        <svg viewBox="0 0 120 90" class="envelope-svg">
+          <rect x="4" y="12" width="112" height="74" rx="6" class="env-body"/>
+          <path d="M4 16 L60 60 L116 16" class="env-flap"/>
+        </svg>
+      </div>
+      <p class="line" data-line="0">Wait&hellip;</p>
+      <p class="line" data-line="1">You found something <span class="emoji">👀</span></p>
+      <p class="line" data-line="2">I made this little secret just for you.</p>
+      <button class="btn btn--primary btn--pulse" id="btnOpenIntro" data-line="3">Open</button>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Digital gift box -->
+  <section class="scene" id="scene-gift" data-scene="gift">
+    <div class="scene-inner scene-inner--center">
+      <p class="line" data-line="0">Okay&hellip; let's open it.</p>
+      <div class="gift-box" id="giftBox" aria-hidden="true">
+        <div class="gift-lid"></div>
+        <div class="gift-base"></div>
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+        <div class="gift-glow"></div>
+      </div>
+      <button class="btn btn--primary" id="btnOpenGift" data-line="1">Open the gift <span class="emoji">🎁</span></button>
+    </div>
+  </section>
+
+  <!-- SCENE 3: The couple appears -->
+  <section class="scene" id="scene-couple" data-scene="couple">
+    <div class="scene-inner scene-inner--center">
+      <div class="couple-frame">
+        <div class="couple-glow" aria-hidden="true"></div>
+        <img src="assets/couple.png" alt="Illustrated cartoon of the two of us" class="couple-img" id="coupleImg1" />
+      </div>
+      <p class="line" data-line="0">And then there's us.</p>
+      <p class="line" data-line="1">Well&hellip;</p>
+      <p class="line" data-line="2">The cartoon version of us anyway <span class="emoji">😂</span></p>
+      <button class="btn btn--secondary" id="btnContinueCouple" data-line="3">Continue <span class="emoji">❤️</span></button>
+    </div>
+  </section>
+
+  <!-- SCENE 4: "This is us" -->
+  <section class="scene" id="scene-us" data-scene="us">
+    <div class="scene-inner scene-inner--center">
+      <div class="couple-frame couple-frame--small">
+        <img src="assets/couple.png" alt="" class="couple-img" />
+      </div>
+      <p class="line line--headline" data-line="0">This is us.</p>
+      <p class="line" data-line="1">Two slightly weird people&hellip;</p>
+      <p class="line" data-line="2">&hellip;who somehow found each other.</p>
+      <p class="line" data-line="3">And I'm really glad we did.</p>
+      <button class="btn btn--secondary" id="btnContinueUs" data-line="4">Continue</button>
+    </div>
+  </section>
+
+  <!-- SCENE 5: Memory journey -->
+  <section class="scene scene--wide" id="scene-memories" data-scene="memories">
+    <div class="scene-inner">
+      <p class="eyebrow-free-heading">A few memories, out of many</p>
+      <div class="memory-progress" id="memoryProgress" aria-hidden="true">
+        <div class="memory-progress-fill" id="memoryProgressFill"></div>
+      </div>
+      <div class="memory-track" id="memoryTrack" tabindex="0" role="region" aria-label="Swipe through memories"></div>
+      <div class="memory-nav">
+        <button class="btn-icon" id="memPrev" aria-label="Previous memory">&larr;</button>
+        <div class="memory-dots" id="memoryDots"></div>
+        <button class="btn-icon" id="memNext" aria-label="Next memory">&rarr;</button>
+      </div>
+      <button class="btn btn--secondary" id="btnFinishMemories">Continue</button>
+    </div>
+  </section>
+
+  <!-- SCENE 6: Playful section -->
+  <section class="scene" id="scene-playful" data-scene="playful">
+    <div class="scene-inner scene-inner--center">
+      <p class="line" data-line="0">Of course&hellip;</p>
+      <p class="line" data-line="1">It hasn't always been cute.</p>
+      <div class="bubbles" data-line="2">
+        <div class="bubble bubble--left">You annoyed me.</div>
+        <div class="bubble bubble--right">I know.</div>
+      </div>
+      <p class="line" data-line="3">But somehow&hellip;</p>
+      <p class="line" data-line="4">&hellip;we're still here.</p>
+      <button class="btn btn--secondary" id="btnContinuePlayful" data-line="5">Okay, enough emotional damage <span class="emoji">😂</span></button>
+    </div>
+  </section>
+
+  <!-- SCENE 7: Emotional section -->
+  <section class="scene scene--dark" id="scene-emotional" data-scene="emotional">
+    <div class="scene-inner scene-inner--center">
+      <div class="couple-frame couple-frame--small couple-frame--muted">
+        <img src="assets/couple.png" alt="" class="couple-img" />
+      </div>
+      <p class="line" data-line="0">I don't know if I can fit everything I feel into one little website.</p>
+      <p class="line" data-line="1">But I do know one thing.</p>
+      <p class="line line--headline" data-line="2">I'm really grateful for you.</p>
+      <p class="line" data-line="3">For all the little moments.</p>
+      <p class="line" data-line="4">For the laughs.</p>
+      <p class="line" data-line="5">For the conversations.</p>
+      <p class="line" data-line="6">Even for the difficult days.</p>
+      <p class="line" data-line="7">And for every memory we've made together.</p>
+      <button class="btn btn--secondary" id="btnContinueEmotional" data-line="8">Continue</button>
+    </div>
+  </section>
+
+  <!-- SCENE 8: Birthday reveal -->
+  <section class="scene" id="scene-birthday" data-scene="birthday">
+    <div class="scene-inner scene-inner--center">
+      <div class="couple-frame couple-frame--cake">
+        <img src="assets/couple.png" alt="" class="couple-img" />
+        <div class="cake" id="cakeEl" aria-hidden="true">
+          <div class="cake-flame flame1"></div>
+          <div class="cake-flame flame2"></div>
+          <div class="cake-candle candle1"></div>
+          <div class="cake-candle candle2"></div>
+          <div class="cake-top"></div>
+          <div class="cake-body"></div>
+        </div>
+      </div>
+      <p class="line" data-line="0">Because today isn't just another day&hellip;</p>
+      <p class="line" data-line="1">It's your day. <span class="emoji">❤️</span></p>
+      <p class="line line--headline" id="birthdayName" data-line="2">Happy Birthday</p>
+      <button class="btn btn--secondary" id="btnContinueBirthday" data-line="3">Continue</button>
+    </div>
+  </section>
+
+  <!-- SCENE 9: Final message -->
+  <section class="scene" id="scene-message" data-scene="message">
+    <div class="scene-inner scene-inner--center">
+      <div class="letter-card" id="letterCard">
+        <p id="letterText" class="letter-text"></p>
+      </div>
+      <button class="btn btn--secondary" id="btnContinueMessage">Continue</button>
+    </div>
+  </section>
+
+  <!-- SCENE 10: Final surprise -->
+  <section class="scene" id="scene-surprise" data-scene="surprise">
+    <div class="scene-inner scene-inner--center">
+      <p class="line" data-line="0">Wait&hellip;</p>
+      <p class="line" data-line="1">There's one last thing.</p>
+      <button class="btn btn--primary" id="btnOpenSurprise" data-line="2">Open <span class="emoji">❤️</span></button>
+      <div class="surprise-content" id="surpriseContent" hidden></div>
+    </div>
+  </section>
+
+  <!-- SCENE 11: Physical gift connection -->
+  <section class="scene" id="scene-final" data-scene="final">
+    <div class="scene-inner scene-inner--center">
+      <div class="gift-box gift-box--small" aria-hidden="true">
+        <div class="gift-lid"></div>
+        <div class="gift-base"></div>
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+      </div>
+      <p class="line" data-line="0">Okay, that's enough screen time.</p>
+      <p class="line" data-line="1">Now&hellip;</p>
+      <p class="line line--headline" data-line="2">Open your actual gift. <span class="emoji">🎁</span></p>
+      <p class="line line--small" data-line="3">Yes, I know you were supposed to open it first.</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
