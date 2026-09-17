@@ -2,29 +2,31 @@
    DESIGN TOKENS
    ========================================================================== */
 :root {
-  --bg: #f9f0e6;
-  --bg-warm-2: #f3e3d3;
-  --surface: #fffaf4;
-  --text: #3a2a32;
-  --muted: #8a7368;
-  --accent: #b5566b;      /* dusty rose */
-  --accent-2: #d6a24c;    /* muted gold */
-  --heart: #e38c93;
+  --bg: #10131e;          /* ink navy, not flat black */
+  --bg-warm-2: #171c2c;
+  --surface: #1c2334;
+  --text: #eef1fb;
+  --muted: #8b96b8;
+  --accent: #5b8def;      /* cobalt blue */
+  --accent-2: #7fd8d9;    /* soft ice teal */
+  --heart: #7ea8f2;
+  --line: rgba(255, 255, 255, 0.08);
   --radius: 22px;
+  --radius-card: 30px 10px 30px 10px; /* asymmetric — deliberately not a uniform rounded-card default */
   --radius-sm: 14px;
-  --shadow: 0 12px 30px rgba(58, 42, 50, 0.12);
+  --shadow: 0 16px 34px rgba(3, 6, 16, 0.45);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --font-display: "Fraunces", Georgia, serif;
-  --font-body: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Dark / emotional palette, applied via .scene--dark */
+/* Emotional scene dips a little darker and quieter than the rest */
 .scene--dark {
-  --bg: #2c2030;
-  --bg-warm-2: #241a29;
-  --surface: #362a3b;
-  --text: #f3e7e2;
-  --muted: #b8a2ac;
+  --bg: #0a0c15;
+  --bg-warm-2: #0d1120;
+  --surface: #151b2c;
+  --text: #eef1fb;
+  --muted: #8b96b8;
 }
 
 * { box-sizing: border-box; }
@@ -43,6 +45,20 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   min-height: 100dvh;
+  position: relative;
+}
+
+/* A faint grain texture over the flat gradient backgrounds — keeps the
+   dark palette from reading as a flat, machine-generated gradient. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 h1, h2, h3, p, button {
@@ -66,6 +82,7 @@ button {
    ========================================================================== */
 #app {
   position: relative;
+  z-index: 2;
   width: 100%;
 }
 
@@ -162,8 +179,8 @@ button {
 
 .btn--primary {
   background: var(--accent);
-  color: #fff8f5;
-  box-shadow: 0 8px 20px rgba(181, 86, 107, 0.35);
+  color: #f3f7ff;
+  box-shadow: 0 8px 20px rgba(91, 141, 239, 0.35);
 }
 
 .btn--primary:active { transform: scale(0.96); }
@@ -179,12 +196,12 @@ button {
 .btn--secondary:active { transform: scale(0.96); }
 
 .btn--pulse {
-  animation: pulse 2.2s ease-in-out infinite;
+  animation: inviteWobble 2.6s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 8px 20px rgba(181, 86, 107, 0.35); }
-  50% { box-shadow: 0 8px 28px rgba(181, 86, 107, 0.6); }
+@keyframes inviteWobble {
+  0%, 100% { transform: translateY(0) rotate(0deg); box-shadow: 0 8px 20px rgba(91, 141, 239, 0.35); }
+  50% { transform: translateY(-2px) rotate(-1.2deg); box-shadow: 0 10px 24px rgba(91, 141, 239, 0.5); }
 }
 
 .btn-icon {
@@ -311,7 +328,7 @@ button {
   width: 140%;
   height: 60%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(214, 162, 76, 0.55) 0%, rgba(214, 162, 76, 0) 70%);
+  background: radial-gradient(circle, rgba(127, 216, 217, 0.55) 0%, rgba(127, 216, 217, 0) 70%);
   opacity: 0;
   transition: opacity 0.6s ease;
   pointer-events: none;
@@ -362,31 +379,62 @@ button {
   will-change: transform;
 }
 
-/* Inner image carries the constant idle "alive" motion — a gentle
-   breathing sway — completely independent of the tilt transform above. */
-.couple-img {
+/* The two characters are separate cut-out layers stacked on top of each
+   other, each free to move on its own timing — this is what gives the
+   illusion of two people shifting/breathing independently rather than
+   one flat card moving as a single block. */
+.couple-duo {
+  position: relative;
   width: 100%;
-  border-radius: var(--radius);
-  transform-origin: 50% 85%;
-  animation: coupleBreathe 4.5s ease-in-out infinite;
+  aspect-ratio: 4 / 7;
   cursor: pointer;
   touch-action: manipulation;
 }
 
-.couple-img.is-nudged {
-  animation: coupleNudge 0.7s var(--ease);
+.couple-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.28));
 }
 
-@keyframes coupleBreathe {
-  0%, 100% { transform: translateY(0) rotate(-0.7deg) scale(1); }
-  50% { transform: translateY(-7px) rotate(0.7deg) scale(1.012); }
+.couple-img--boy {
+  transform-origin: 34% 96%;
+  animation: swayBoy 4.8s ease-in-out infinite;
 }
 
-@keyframes coupleNudge {
+.couple-img--girl {
+  transform-origin: 68% 96%;
+  animation: swayGirl 4.2s ease-in-out infinite;
+  animation-delay: -1.1s; /* out of phase with the boy, so they don't move as one block */
+}
+
+.couple-img--boy.is-nudged { animation: nudgeBoy 0.75s var(--ease); }
+.couple-img--girl.is-nudged { animation: nudgeGirl 0.75s var(--ease); }
+
+@keyframes swayBoy {
+  0%, 100% { transform: translateY(0) rotate(-1.1deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes swayGirl {
+  0%, 100% { transform: translateY(-2px) rotate(1.2deg); }
+  50% { transform: translateY(-9px) rotate(-1deg); }
+}
+
+@keyframes nudgeBoy {
   0% { transform: scale(1) rotate(0deg); }
-  30% { transform: scale(1.06) rotate(-3deg); }
-  55% { transform: scale(0.98) rotate(2.5deg); }
-  75% { transform: scale(1.03) rotate(-1deg); }
+  25% { transform: scale(1.05) rotate(-6deg); }
+  55% { transform: scale(0.98) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes nudgeGirl {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.05) rotate(6deg); }
+  55% { transform: scale(0.98) rotate(-3deg); }
   100% { transform: scale(1) rotate(0deg); }
 }
 
@@ -403,21 +451,20 @@ button {
   100% { transform: translate(var(--sx, 0), var(--sy, -40px)) scale(1.1); opacity: 0; }
 }
 
-/* Graceful fallback if assets/couple.png fails to load */
+/* Graceful fallback if a couple-boy.png / couple-girl.png fails to load */
 .couple-img-fallback {
-  width: 100%;
-  aspect-ratio: 3 / 4;
+  position: absolute;
+  inset: 0;
   border-radius: var(--radius);
   background: linear-gradient(150deg, var(--accent) 0%, var(--accent-2) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff8f5;
+  color: #f3f7ff;
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: center;
   padding: 20px;
-  animation: coupleBreathe 4.5s ease-in-out infinite;
 }
 
 .couple-glow {
@@ -427,7 +474,7 @@ button {
   width: 120%;
   height: 80%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(214, 162, 76, 0.35) 0%, rgba(214, 162, 76, 0) 70%);
+  background: radial-gradient(circle, rgba(127, 216, 217, 0.35) 0%, rgba(127, 216, 217, 0) 70%);
   z-index: -1;
 }
 
@@ -454,18 +501,19 @@ button {
 
 .cake-body {
   width: 100%;
-  height: 26px;
-  background: var(--accent);
-  border-radius: 6px;
+  height: 28px;
+  background: linear-gradient(180deg, var(--accent) 0%, #3f66c4 100%);
+  border-radius: 5px 5px 10px 10px;
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.12);
 }
 
 .cake-top {
   width: 108%;
   margin-left: -4%;
-  height: 10px;
-  background: var(--surface);
-  border-radius: 6px;
-  margin-bottom: -2px;
+  height: 11px;
+  background: linear-gradient(180deg, #fbfcff 0%, #e6ecfb 100%);
+  border-radius: 7px;
+  margin-bottom: -3px;
   position: relative;
   z-index: 1;
 }
@@ -531,7 +579,8 @@ button {
   position: absolute;
   inset: 0;
   background: var(--surface);
-  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow);
   overflow: hidden;
   display: flex;
@@ -660,7 +709,7 @@ button {
 .bubble--right {
   align-self: flex-end;
   background: var(--accent);
-  color: #fff8f5;
+  color: #f3f7ff;
   border-bottom-right-radius: 4px;
 }
 
@@ -670,7 +719,8 @@ button {
 .letter-card {
   width: 100%;
   background: var(--surface);
-  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow);
   padding: 26px 22px;
   opacity: 0;
@@ -739,6 +789,10 @@ button {
   justify-content: center;
   font-size: 1.15rem;
   z-index: 100;
+}
+
+.audio-toggle[hidden] {
+  display: none;
 }
 
 .audio-toggle:active { transform: scale(0.94); }
