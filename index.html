@@ -11,7 +11,7 @@
 <!-- SITE_VERSION below is a cache-buster. Bump it (v2, v3, ...) each time
      you redeploy so GitHub Pages' CDN and phone browsers can't serve a
      stale, cached copy of style.css / script.js. -->
-<link rel="stylesheet" href="style.css?v=3" />
+<link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
 
@@ -62,19 +62,18 @@
   <!-- SCENE 3: The couple appears -->
   <section class="scene" id="scene-couple" data-scene="couple">
     <div class="scene-inner scene-inner--center">
-      <div class="couple-frame">
-        <div class="couple-glow" aria-hidden="true"></div>
-        <div class="couple-tilt" data-tilt>
-          <div class="couple-duo" id="coupleDuo1" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
-            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
-            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
-          </div>
+      <div class="entrance-frame" id="entranceFrame">
+        <div class="couple-glow" id="entranceGlow" aria-hidden="true"></div>
+        <div class="entrance-stage" id="entranceStage">
+          <img src="assets/character-boy.png" alt="" class="entrance-char entrance-char--boy" id="entranceBoy" />
+          <img src="assets/character-girl.png" alt="" class="entrance-char entrance-char--girl" id="entranceGirl" />
+          <div class="big-heart" id="bigHeart" aria-hidden="true">❤️</div>
         </div>
+        <img src="assets/couple.png" alt="Illustrated cartoon of the two of us" class="couple-final-img" id="coupleFinalImg" />
       </div>
-      <p class="line" data-line="0">You've already seen this.</p>
-      <p class="line" data-line="1">But couldn't find a better one so&hellip; <span class="emoji">😂</span></p>
-      <!-- <p class="line" data-line="2">The cartoon version of us anyway </p> -->
-      <button class="btn btn--secondary" id="btnContinueCouple" data-line="3">Continue <span class="emoji">❤️</span></button>
+      <p class="line" data-line="5">You've already seen this.</p>
+      <p class="line" data-line="6">But couldn't find a better one so&hellip; <span class="emoji">😂</span></p>
+      <button class="btn btn--secondary" id="btnContinueCouple" data-line="7">Continue <span class="emoji">❤️</span></button>
     </div>
   </section>
 
@@ -83,10 +82,7 @@
     <div class="scene-inner scene-inner--center">
       <div class="couple-frame couple-frame--small">
         <div class="couple-tilt" data-tilt>
-          <div class="couple-duo" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
-            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
-            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
-          </div>
+          <img src="assets/couple.png" alt="" class="couple-img" data-couple-single />
         </div>
       </div>
       <p class="line line--headline" data-line="0">Us, what can I say about us?</p>
@@ -134,10 +130,7 @@
     <div class="scene-inner scene-inner--center">
       <div class="couple-frame couple-frame--small couple-frame--muted">
         <div class="couple-tilt" data-tilt>
-          <div class="couple-duo" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
-            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
-            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
-          </div>
+          <img src="assets/couple.png" alt="" class="couple-img" data-couple-single />
         </div>
       </div>
       <p class="line" data-line="0">I don't know if I can fit everything I feel into one little website.</p>
@@ -157,10 +150,7 @@
     <div class="scene-inner scene-inner--center">
       <div class="couple-frame couple-frame--cake">
         <div class="couple-tilt" data-tilt>
-          <div class="couple-duo" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
-            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
-            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
-          </div>
+          <img src="assets/couple.png" alt="" class="couple-img" data-couple-single />
         </div>
         <div class="cake" id="cakeEl" aria-hidden="true">
           <div class="cake-flame flame1"></div>
@@ -216,6 +206,6 @@
 
 </main>
 
-<script src="script.js?v=3"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
