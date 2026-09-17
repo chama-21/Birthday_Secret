@@ -7,8 +7,11 @@
 <meta name="description" content="A tiny interactive love letter." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- SITE_VERSION below is a cache-buster. Bump it (v2, v3, ...) each time
+     you redeploy so GitHub Pages' CDN and phone browsers can't serve a
+     stale, cached copy of style.css / script.js. -->
+<link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
 
@@ -62,7 +65,10 @@
       <div class="couple-frame">
         <div class="couple-glow" aria-hidden="true"></div>
         <div class="couple-tilt" data-tilt>
-          <img src="assets/couple.png" alt="Illustrated cartoon of the two of us" class="couple-img" id="coupleImg1" data-couple-img />
+          <div class="couple-duo" id="coupleDuo1" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
+            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
+            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
+          </div>
         </div>
       </div>
       <p class="line" data-line="0">And then there's us.</p>
@@ -77,7 +83,10 @@
     <div class="scene-inner scene-inner--center">
       <div class="couple-frame couple-frame--small">
         <div class="couple-tilt" data-tilt>
-          <img src="assets/couple.png" alt="" class="couple-img" data-couple-img />
+          <div class="couple-duo" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
+            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
+            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
+          </div>
         </div>
       </div>
       <p class="line line--headline" data-line="0">This is us.</p>
@@ -125,7 +134,10 @@
     <div class="scene-inner scene-inner--center">
       <div class="couple-frame couple-frame--small couple-frame--muted">
         <div class="couple-tilt" data-tilt>
-          <img src="assets/couple.png" alt="" class="couple-img" data-couple-img />
+          <div class="couple-duo" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
+            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
+            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
+          </div>
         </div>
       </div>
       <p class="line" data-line="0">I don't know if I can fit everything I feel into one little website.</p>
@@ -145,7 +157,10 @@
     <div class="scene-inner scene-inner--center">
       <div class="couple-frame couple-frame--cake">
         <div class="couple-tilt" data-tilt>
-          <img src="assets/couple.png" alt="" class="couple-img" data-couple-img />
+          <div class="couple-duo" data-couple-duo role="img" aria-label="Illustrated cartoon of the two of us">
+            <img src="assets/couple-boy.png" alt="" class="couple-img couple-img--boy" data-couple-half="boy" />
+            <img src="assets/couple-girl.png" alt="" class="couple-img couple-img--girl" data-couple-half="girl" />
+          </div>
         </div>
         <div class="cake" id="cakeEl" aria-hidden="true">
           <div class="cake-flame flame1"></div>
@@ -201,6 +216,6 @@
 
 </main>
 
-<script src="script.js"></script>
+<script src="script.js?v=3"></script>
 </body>
 </html>
