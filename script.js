@@ -439,6 +439,8 @@ function initMemories() {
     img.alt = memory.title;
     img.loading = "lazy";
     img.src = memory.image;
+    // Feed the same file to the blurred backdrop behind the photo.
+    media.style.setProperty("--photo-bg", `url("${memory.image}")`);
     img.addEventListener("error", () => {
       img.remove();
       const placeholder = document.createElement("div");
