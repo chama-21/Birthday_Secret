@@ -22,45 +22,39 @@ And here's to all the moments we haven't made yet.`;
 const MEMORIES = [
   {
     title: "The beginning",
-    description: "PLACE YOUR MEMORY HERE",
+    description: "Somewhere in all that chaos, this is where it started.",
     date: "",
-    image: "assets/photos/memory1.jpg",
+    image: "assets/photos/beginning.jpg",
   },
   {
     title: "The stupid conversations",
-    description: "PLACE YOUR MEMORY HERE",
+    description: "The kind of nonsense only the two of us ever found funny.",
     date: "",
-    image: "assets/photos/memory2.jpg",
+    image: "assets/photos/stupid-conversations.jpg",
   },
   {
     title: "The endless calls",
-    description: "PLACE YOUR MEMORY HERE",
+    description: "\"Five more minutes\" calls that somehow ran for hours.",
     date: "",
-    image: "assets/photos/memory3.jpg",
+    image: "assets/photos/endless-calls.jpg",
   },
   {
     title: "The moments that made us laugh",
-    description: "PLACE YOUR MEMORY HERE",
+    description: "Some days it was one joke away from actual tears.",
     date: "",
-    image: "assets/photos/memory4.jpg",
+    image: "assets/photos/made-us-laugh.jpg",
   },
   {
-    title: "The arguments",
-    description: "PLACE YOUR MEMORY HERE",
+    title: "The arguments (and the apologies)",
+    description: "The fights that felt huge at the time, and the \"pleaseee\" that always followed.",
     date: "",
-    image: "assets/photos/memory5.jpg",
-  },
-  {
-    title: "The apologies",
-    description: "PLACE YOUR MEMORY HERE",
-    date: "",
-    image: "assets/photos/memory6.jpg",
+    image: "assets/photos/argue-apologies.jpg",
   },
   {
     title: "And everything in between",
-    description: "PLACE YOUR MEMORY HERE",
+    description: "All the small, quiet moments that never got a name of their own.",
     date: "",
-    image: "assets/photos/memory7.jpg",
+    image: "assets/photos/in-between.jpg",
   },
 ];
 
