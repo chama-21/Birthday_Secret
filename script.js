@@ -22,26 +22,26 @@ And here's to all the moments we haven't made yet.`;
 const MEMORIES = [
   {
     title: "The beginning",
-    description: "Somewhere in all that chaos, this is where it started.",
-    date: "",
+    description: "I don't know when and how it all begun, but if I were to make a guess, it would be this day and Dhurandhar 2 will always be my favourite movie.",
+    date: "22nd Mar, 2026",
     image: "assets/photos/Beginning.jpeg",
   },
   {
     title: "The stupid conversations",
-    description: "The kind of nonsense only the two of us ever found funny.",
+    description: "I remember this day, we were sitting and I was playing UFC, and later felt guilty about it 😂.",
     date: "",
     image: "assets/photos/Stupid_Conversations.jpeg",
   },
   {
     title: "The endless calls",
-    description: "\"Five more minutes\" calls that somehow ran for hours.",
+    description: "The calls that somehow ran for hours, just on \" AUR BATAO!?\".",
     date: "",
     image: "assets/photos/Endless_Calls.jpeg",
   },
   {
     title: "The moments that made us laugh",
-    description: "Some days it was one joke away from actual tears.",
-    date: "",
+    description: "Well laugh for you guys, embarrassment for me and my child. 😭",
+    date: "12th May, 2026",
     image: "assets/photos/Made_us_laugh.jpeg",
   },
   {
@@ -52,7 +52,7 @@ const MEMORIES = [
   },
   {
     title: "And everything in between",
-    description: "All the small, quiet moments that never got a name of their own.",
+    description: "All the small, quiet moments that never got a name of their own, but it was us in between.",
     date: "",
     image: "assets/photos/In_between.jpeg",
   },
