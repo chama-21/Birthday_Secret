@@ -662,7 +662,7 @@ button {
 .memory-track {
   position: relative;
   width: 100%;
-  height: 340px;
+  height: min(72vh, 560px);
   outline: none;
 }
 
@@ -695,19 +695,34 @@ button {
 }
 
 .memory-card-media {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+}
+
+/* Blurred copy of the same photo, filling the leftover space so nothing
+   has to be cropped and no flat letterbox bars show. */
+.memory-card-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--photo-bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(22px) brightness(0.5) saturate(1.1);
+  transform: scale(1.2);
 }
 
 .memory-card-media img {
+  position: relative;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .memory-card-placeholder {
@@ -914,7 +929,7 @@ button {
    ========================================================================== */
 @media (min-width: 640px) {
   .line { font-size: 1.25rem; }
-  .memory-track { height: 380px; }
+  .memory-track { height: min(74vh, 620px); }
 }
 
 @media (max-width: 340px) {
