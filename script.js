@@ -42,7 +42,7 @@ const MEMORIES = [
     title: "The moments that made us laugh",
     description: "Some days it was one joke away from actual tears.",
     date: "",
-    image: "assets/photos/Made-us-laugh.jpeg",
+    image: "assets/photos/Made_us_laugh.jpeg",
   },
   {
     title: "The arguments (and the apologies)",
