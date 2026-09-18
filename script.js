@@ -18,6 +18,16 @@ Thank you for being part of my life.
 NOW, YOU CAN CLOSE THIS, AND PLEASE DON'T ABUSE ME, CAUSE YOU ASKED ME NOT TO OVERDO IT.
 BUT HONESTLY, I WANT TO DO SO MUCH MORE FOR YOU.`;
 
+// The photo shown on the "Happy Birthday, My Love" screen (scene 8).
+// If the file is missing, it's skipped silently and the couple illustration
+// comes back on its own — the scene never breaks.
+const BIRTHDAY_PHOTO = {
+  src: "assets/photos/Happy_birthday.jpeg",
+  caption: "Make a wish 🎂", // set to "" to hide the caption
+  // true  -> this photo replaces the couple illustration + CSS cake here
+  // false -> show the couple illustration above it as well
+  replaceCoupleImage: true,
+};
 // Each memory supports an optional photo. If the image file doesn't exist,
 // a designed placeholder is shown automatically — nothing breaks.
 const MEMORIES = [
@@ -535,16 +545,78 @@ document.getElementById("btnContinueEmotional").addEventListener("click", nextSc
 /* ----------------------------------------------------------------------
    SCENE 8 — birthday reveal
    ---------------------------------------------------------------------- */
-
 function setupBirthdayScene() {
   document.getElementById("birthdayName").textContent = `Happy Birthday, ${HER_NAME}`;
-  const cake = document.getElementById("cakeEl");
-  cake.classList.remove("is-visible");
+
+  const scene = getSceneEl("birthday");
+  const coupleFrame = scene.querySelector(".couple-frame--cake");
+  const photo = document.getElementById("birthdayPhoto");
+  const photoImg = document.getElementById("birthdayPhotoImg");
+  const caption = document.getElementById("birthdayPhotoCaption");
+  const usePhoto = Boolean(photo && photoImg && BIRTHDAY_PHOTO && BIRTHDAY_PHOTO.src);
+
+  // Falls back to the original couple + CSS cake if the photo can't be used.
+  const showCouple = !usePhoto || !BIRTHDAY_PHOTO.replaceCoupleImage;
+
+  if (coupleFrame) coupleFrame.hidden = !showCouple;
+
+  if (showCouple) {
+    const cake = document.getElementById("cakeEl");
+    cake.classList.remove("is-visible");
+    setTimeout(() => {
+      cake.classList.add("is-visible");
+      spawnParticles(18);
+    }, 700);
+  }
+
+  if (!usePhoto) return;
+
+  photo.hidden = false;
+  photo.classList.remove("is-visible");
+  caption.textContent = BIRTHDAY_PHOTO.caption || "";
+  caption.hidden = !BIRTHDAY_PHOTO.caption;
+  photoImg.alt = `Happy birthday, ${HER_NAME}`;
+
+  // Only (re)load the file the first time this scene is entered.
+  if (photoImg.getAttribute("src") !== BIRTHDAY_PHOTO.src) {
+    photoImg.addEventListener(
+      "error",
+      () => {
+        // Photo missing — hide it and restore the original couple + cake.
+        photo.hidden = true;
+        if (coupleFrame) {
+          coupleFrame.hidden = false;
+          coupleFrame.classList.add("is-visible");
+          document.getElementById("cakeEl").classList.add("is-visible");
+        }
+      },
+      { once: true }
+    );
+    photoImg.src = BIRTHDAY_PHOTO.src;
+  }
+
   setTimeout(() => {
-    cake.classList.add("is-visible");
+    photo.classList.add("is-visible");
     spawnParticles(18);
-  }, 700);
+  }, 600);
 }
+
+// Tap the birthday photo for the same little sparkle reaction as the
+// couple illustration elsewhere in the experience.
+(function setupBirthdayPhotoTap() {
+  const photo = document.getElementById("birthdayPhoto");
+  if (!photo) return;
+  photo.addEventListener("click", () => {
+    const inner = photo.querySelector(".birthday-photo-inner");
+    if (!inner) return;
+    inner.classList.remove("is-bumping");
+    void inner.offsetWidth; // restart the animation on repeated taps
+    inner.classList.add("is-bumping");
+    spawnSparkleBurst(photo);
+    setTimeout(() => spawnBigHeart(photo), 260);
+    setTimeout(() => inner.classList.remove("is-bumping"), 950);
+  });
+})();
 
 document.getElementById("btnContinueBirthday").addEventListener("click", nextScene);
 
