@@ -11,7 +11,7 @@
 <!-- SITE_VERSION below is a cache-buster. Bump it (v2, v3, ...) each time
      you redeploy so GitHub Pages' CDN and phone browsers can't serve a
      stale, cached copy of style.css / script.js. -->
-<link rel="stylesheet" href="style.css?v=9" />
+<link rel="stylesheet" href="style.css?v=10" />
 </head>
 <body>
 
@@ -161,6 +161,15 @@
           <div class="cake-body"></div>
         </div>
       </div>
+           <!-- Separate birthday photo, configured via BIRTHDAY_PHOTO in script.js -->
+      <figure class="birthday-photo" id="birthdayPhoto" hidden>
+        <div class="couple-tilt" data-tilt>
+          <div class="birthday-photo-inner">
+            <img id="birthdayPhotoImg" src="" alt="Happy birthday" />
+          </div>
+        </div>
+        <figcaption class="birthday-photo-caption" id="birthdayPhotoCaption"></figcaption>
+      </figure>
       <p class="line" data-line="0">Because today isn't just another day&hellip;</p>
       <p class="line" data-line="1">It's your day kiddo <span class="emoji">❤️</span></p>
       <p class="line line--headline" id="birthdayName" data-line="2">Happy Birthday</p>
@@ -206,6 +215,6 @@
 
 </main>
 
-<script src="script.js?v=9"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>
