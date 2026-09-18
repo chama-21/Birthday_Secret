@@ -921,3 +921,88 @@ button {
   .scene { padding: 24px 14px 40px; }
   .line { font-size: 1.05rem; }
 }
+
+/* --------------------------------------------------------------------------
+   SCENE 8: the separate birthday photo (a taped-up print, slightly askew)
+   -------------------------------------------------------------------------- */
+.birthday-photo {
+  position: relative;
+  margin: 6px auto 14px;
+  width: fit-content;
+  max-width: min(76vw, 300px);
+  opacity: 0;
+  transform: scale(0.9) translateY(14px) rotate(-3deg);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.birthday-photo.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0) rotate(-1.2deg);
+}
+
+/* Extra clearance when the couple illustration (and its cake) is kept above */
+.couple-frame:not([hidden]) ~ .birthday-photo { margin-top: 30px; }
+
+/* Little strip of washi tape at the top corner */
+.birthday-photo::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 62px;
+  height: 20px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: linear-gradient(180deg, rgba(127, 216, 217, 0.5), rgba(91, 141, 239, 0.38));
+  border-radius: 2px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.birthday-photo-inner {
+  position: relative;
+  padding: 10px 10px 12px;
+  background: linear-gradient(170deg, #fbfcff 0%, #e9eefb 100%);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+  cursor: pointer;
+  touch-action: manipulation;
+  animation: photoSway 5.2s ease-in-out infinite;
+  transform-origin: 50% 0%;
+}
+
+.birthday-photo-inner img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: min(42vh, 360px);
+  border-radius: 6px;
+  background: #f6f3ec;
+}
+
+.birthday-photo-inner.is-bumping {
+  animation: singleBump 0.9s var(--ease) 1;
+}
+
+@keyframes photoSway {
+  0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+  50% { transform: translateY(-5px) rotate(0.5deg); }
+}
+
+.birthday-photo-caption {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-photo,
+  .birthday-photo-inner {
+    animation: none;
+    transition: opacity 0.3s linear;
+    transform: none;
+  }
+  .birthday-photo.is-visible { transform: none; }
+}
