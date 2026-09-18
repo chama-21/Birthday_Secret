@@ -24,13 +24,13 @@ const MEMORIES = [
     title: "The beginning",
     description: "Somewhere in all that chaos, this is where it started.",
     date: "",
-    image: "assets/photos/beginning.jpg",
+    image: "assets/photos/beginning.png",
   },
   {
     title: "The stupid conversations",
     description: "The kind of nonsense only the two of us ever found funny.",
     date: "",
-    image: "assets/photos/stupid-conversations.jpg",
+    image: "assets/photos/stupid-conversations.png",
   },
   {
     title: "The endless calls",
@@ -54,7 +54,7 @@ const MEMORIES = [
     title: "And everything in between",
     description: "All the small, quiet moments that never got a name of their own.",
     date: "",
-    image: "assets/photos/in-between.jpg",
+    image: "assets/photos/in-between.png",
   },
 ];
 
