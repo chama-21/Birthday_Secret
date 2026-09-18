@@ -24,37 +24,37 @@ const MEMORIES = [
     title: "The beginning",
     description: "Somewhere in all that chaos, this is where it started.",
     date: "",
-    image: "assets/photos/beginning.png",
+    image: "assets/photos/Beginning.jpeg",
   },
   {
     title: "The stupid conversations",
     description: "The kind of nonsense only the two of us ever found funny.",
     date: "",
-    image: "assets/photos/stupid-conversations.png",
+    image: "assets/photos/Stupid_Conversations.jpeg",
   },
   {
     title: "The endless calls",
     description: "\"Five more minutes\" calls that somehow ran for hours.",
     date: "",
-    image: "assets/photos/endless-calls.jpg",
+    image: "assets/photos/Endless_Calls.jpeg",
   },
   {
     title: "The moments that made us laugh",
     description: "Some days it was one joke away from actual tears.",
     date: "",
-    image: "assets/photos/made-us-laugh.jpg",
+    image: "assets/photos/Made-us-laugh.jpeg",
   },
   {
     title: "The arguments (and the apologies)",
     description: "The fights that felt huge at the time, and the \"pleaseee\" that always followed.",
     date: "",
-    image: "assets/photos/argue-apologies.jpg",
+    image: "assets/photos/Argue_Apologies.jpeg",
   },
   {
     title: "And everything in between",
     description: "All the small, quiet moments that never got a name of their own.",
     date: "",
-    image: "assets/photos/in-between.png",
+    image: "assets/photos/In_between.jpeg",
   },
 ];
 
