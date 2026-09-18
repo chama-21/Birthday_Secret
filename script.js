@@ -11,11 +11,12 @@ const BIRTHDAY_MESSAGE = `Happy Birthday, my love. ❤️
 I hope this year brings you countless reasons to smile,
 new memories,
 new adventures,
-and everything you've been wishing for.
+and everything you've been wishing for, especially your placements.
 
 Thank you for being part of my life.
 
-And here's to all the moments we haven't made yet.`;
+NOW, YOU CAN CLOSE THIS, AND PLEASE DON'T ABUSE ME, CAUSE YOU ASKED ME NOT TO OVERDO IT.
+BUT HONESTLY, I WANT TO DO SO MUCH MORE FOR YOU.`;
 
 // Each memory supports an optional photo. If the image file doesn't exist,
 // a designed placeholder is shown automatically — nothing breaks.
